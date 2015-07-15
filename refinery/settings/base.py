@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import djcelery
 from django.core.exceptions import ImproperlyConfigured
 
 logger = logging.getLogger(__name__)
@@ -27,8 +26,6 @@ def get_setting(name, settings=local_settings):
     except KeyError:
         raise ImproperlyConfigured("Missing setting '{0}'".format(name))
 
-
-djcelery.setup_loader()
 
 # a tuple that lists people who get code error notifications
 # (convert JSON list of lists to tuple of tuples)
@@ -150,10 +147,8 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     # NG: added for search and faceting (Solr support)
     'haystack',
-    # NG: added for celery (task queue)
-    'djcelery',  # django-celery
     # NG: added for API
-    "tastypie",
+    'tastypie',
     'guardian',
     'djangular',
     'galaxy_connector',

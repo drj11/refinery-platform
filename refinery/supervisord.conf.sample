@@ -35,14 +35,14 @@ autorestart = true
 startsecs = 10
 
 [group:celeryd]
-programs = worker1,worker2
+programs = w1,w2,beat
 priority = 995
 
-[program:worker1]
+[program:w1]
 ; minimum of four processes required to avoid problems with monitoring tasks
-command = python %(here)s/manage.py celeryd -c 4 -Q celery --events
+command = celery --app=celery_app --concurrency=4 --queues=celery --events worker
 environment = PATH="/home/vagrant/.virtualenvs/refinery-platform/bin"
-stdout_logfile = %(here)s/log/celeryd-w1.log
+stdout_logfile = %(here)s/log/celery-w1.log
 stdout_logfile_maxbytes = 1MB
 stdout_logfile_backups = 4
 redirect_stderr = true
@@ -56,11 +56,11 @@ killasgroup = true
 ;stopwaitsecs = 60
 priority = 995
 
-[program:worker2]
+[program:w2]
 ; limits concurrency of file imports to one to avoid overloading system IO
-command = python %(here)s/manage.py celeryd -c 1 -Q file_import --events
+command = celery --app=celery_app --concurrency=1 --queues=file_import --events worker
 environment = PATH="/home/vagrant/.virtualenvs/refinery-platform/bin"
-stdout_logfile = %(here)s/log/celeryd-w2.log
+stdout_logfile = %(here)s/log/celery-w2.log
 stdout_logfile_maxbytes = 1MB
 stdout_logfile_backups = 4
 redirect_stderr = true
@@ -74,22 +74,10 @@ killasgroup = true
 ;stopwaitsecs = 60
 priority = 995
 
-[program:celerycam]
-command = python %(here)s/manage.py celerycam
+[program:beat]
+command = celery beat
 environment = PATH="/home/vagrant/.virtualenvs/refinery-platform/bin"
-stdout_logfile = %(here)s/log/celerycam.log
-stdout_logfile_maxbytes = 1MB
-stdout_logfile_backups = 4
-redirect_stderr = true
-autostart = true
-autorestart = true
-startsecs = 3
-priority= 994
-
-[program:celerybeat]
-command = python %(here)s/manage.py celerybeat
-environment = PATH="/home/vagrant/.virtualenvs/refinery-platform/bin"
-stdout_logfile = %(here)s/log/celerybeat.log
+stdout_logfile = %(here)s/log/celery-beat.log
 stdout_logfile_maxbytes = 1MB
 stdout_logfile_backups = 4
 redirect_stderr = true

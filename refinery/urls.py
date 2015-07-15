@@ -92,8 +92,6 @@ urlpatterns = patterns(
     url(r'^visualization_manager/', include('visualization_manager.urls')),
     url(r'^file_server/', include('file_server.urls')),
 
-    url(r'^tasks/', include('djcelery.urls')),
-
     # NG: added to include additional views for admin
     # (this is not the recommended way but the only one I got to work)
     # url(
