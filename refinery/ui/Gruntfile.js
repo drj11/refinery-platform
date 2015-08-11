@@ -267,7 +267,7 @@ module.exports = function(grunt) {
       gruntfile: {
         files: 'Gruntfile.js',
         tasks: [
-          'jshint:gruntfile',
+          'eslint:gruntfile',
           'build'
         ]
       },
@@ -292,7 +292,7 @@ module.exports = function(grunt) {
           '<%= cfg.basePath.ui.src %>/js/**/*.js'
         ],
         tasks: [
-          'jshint:src',
+          'eslint:src',
           'copy:uiBuildScripts',
           'concat-by-feature:build'
         ]
@@ -366,6 +366,18 @@ module.exports = function(grunt) {
           '<%= cfg.basePath.djangoTemplates %>/**/*'
         ]
       },
+    },
+
+    /*
+     * Lint source JS files to find possible flaws that could lead to errors.
+     */
+    eslint: {
+      src: [
+        '<%= cfg.basePath.ui.src %>/js/**/*.js'
+      ],
+      gruntfile: [
+        'Gruntfile.js'
+      ]
     },
 
     /*
@@ -502,7 +514,7 @@ module.exports = function(grunt) {
           }
         ]
       },
-      vendor_assets: {
+      vendorAssets: {
         files: [
           {
             '<%= cfg.vendorPath %>/angular-ui-select2/release/select2.min.js':
@@ -639,7 +651,7 @@ module.exports = function(grunt) {
   // Do as little as possible to get Refinery running to keep grunt watch
   // responsive.
   grunt.registerTask('build', [
-    'jshint',
+    'eslint',
     'clean:uiBuild',
     'clean:staticBuild',
     'less:build',
@@ -654,7 +666,7 @@ module.exports = function(grunt) {
 
   // Do all the heavy lifting to get Refinery ready for production.
   grunt.registerTask('compile', [
-    'jshint',
+    'eslint',
     'clean:uiCompile',
     'clean:staticCompile',
     'less:compile',
