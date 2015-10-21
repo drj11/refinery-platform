@@ -22,9 +22,10 @@
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "HOST": "",
         "NAME": "refinery",
+        "USER": "ubuntu",
         "PASSWORD": "",
         "PORT": "",
-        "USER": "vagrant"
+        "USER": "ubuntu"
     }
   },
   "DEFAULT_FROM_EMAIL": "webmaster@localhost",

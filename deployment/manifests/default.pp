@@ -1,5 +1,5 @@
-$appuser = "vagrant"
-$appgroup = "vagrant"
+$appuser = "ubuntu"
+$appgroup = "ubuntu"
 $virtualenv = "/home/${appuser}/.virtualenvs/refinery-platform"
 $requirements = "/vagrant/requirements.txt"
 $project_root = "/vagrant/refinery"
@@ -262,9 +262,9 @@ class neo4j {
     match => "^#org.neo4j.server.webserver.address=",
   }
   limits::fragment {
-    "vagrant/soft/nofile":
+    "${appuser}/soft/nofile":
       value => "40000";
-    "vagrant/hard/nofile":
+    "${appuser}/hard/nofile":
       value => "40000";
   }
 }
@@ -335,6 +335,7 @@ class ui {
   }
   ->
   exec { "bower_modules":
+    # remove bower_components instead?
     command => "/usr/bin/bower prune && /usr/bin/bower install --config.interactive=false",
     cwd => $ui_app_root,
     logoutput => on_failure,
@@ -343,14 +344,14 @@ class ui {
     environment => ["HOME=/home/${appuser}"],
   }
   ->
-  exec { "grunt":
-    command => "/usr/bin/grunt build && /usr/bin/grunt compile",
-    cwd => $ui_app_root,
-    logoutput => on_failure,
-    user => $appuser,
-    group => $appgroup,
-  }
-  ->
+#  exec { "grunt":
+#    command => "/usr/bin/grunt build && /usr/bin/grunt compile",
+#    cwd => $ui_app_root,
+#    logoutput => on_failure,
+#    user => $appuser,
+#    group => $appgroup,
+#  }
+#  ->
   exec { "collectstatic":
     command => "${virtualenv}/bin/python ${project_root}/manage.py collectstatic --clear --noinput",
     environment => ["DJANGO_SETTINGS_MODULE=${django_settings_module}"],
