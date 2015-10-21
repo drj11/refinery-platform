@@ -344,14 +344,14 @@ class ui {
     environment => ["HOME=/home/${appuser}"],
   }
   ->
-#  exec { "grunt":
-#    command => "/usr/bin/grunt build && /usr/bin/grunt compile",
-#    cwd => $ui_app_root,
-#    logoutput => on_failure,
-#    user => $appuser,
-#    group => $appgroup,
-#  }
-#  ->
+  exec { "grunt":
+    command => "/usr/bin/grunt",
+    cwd => $ui_app_root,
+    logoutput => on_failure,
+    user => $appuser,
+    group => $appgroup,
+  }
+  ->
   exec { "collectstatic":
     command => "${virtualenv}/bin/python ${project_root}/manage.py collectstatic --clear --noinput",
     environment => ["DJANGO_SETTINGS_MODULE=${django_settings_module}"],
