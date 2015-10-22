@@ -21,6 +21,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.ssh.forward_agent = true  # to enable cloning from Github over SSH
 
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder ".", "/srv/refinery-platform", create: true, owner: 1002, group: 1002
+
   # If you'd like to be able to copy data from an instance of Galaxy
   # that's installed on the host, set $GALAXY_DATABSE_DIR environment
   # variable to the absolute path of the $GALAXY_ROOT/database folder
@@ -37,25 +40,18 @@ GALAXY_WARNING_SCRIPT
   # If you'd like to be able to copy data from your host into the VM, set
   # REFINERY_VM_TRANSFER_DIR on the host to a directory of your choice.
   if ENV['REFINERY_VM_TRANSFER_DIR']
-    config.vm.synced_folder ENV['REFINERY_VM_TRANSFER_DIR'], "/vagrant/transfer"
+    config.vm.synced_folder ENV['REFINERY_VM_TRANSFER_DIR'], "/srv/refinery-platform/transfer"
 #    puts("INFO: Using host directory #{ENV['REFINERY_VM_TRANSFER_DIR']} to import datasets.")
   else
 #   puts("WARNING: $REFINERY_VM_TRANSFER_DIR is not set: importing datasets from the command line will not work.")
   end
 
-  # Install Librarian-puppet and modules before puppet provisioning (requires git and ruby-dev)
-  $librarian_puppet_install_script =
-<<SCRIPT
-  export DEBIAN_FRONTEND=noninteractive
-  /usr/bin/apt-get -qq update && /usr/bin/apt-get -q -y install git ruby-dev
-  /usr/bin/gem install librarian-puppet -v 2.2.1 --no-rdoc --no-ri && cd /vagrant/deployment && librarian-puppet install
-SCRIPT
-  config.vm.provision :shell, :inline => $librarian_puppet_install_script
+  config.vm.provision "shell", path: "deployment/bootstrap.sh"
 
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "deployment/manifests"
     puppet.manifest_file  = "default.pp"
     puppet.module_path = "deployment/modules"  # requires modules dir to exist when this file is parsed
-    puppet.options = "--hiera_config /vagrant/deployment/hiera.yaml"  # to avoid missing file warning
+    puppet.options = "--hiera_config /srv/refinery-platform/deployment/hiera.yaml"  # to avoid missing file warning
   end
 end

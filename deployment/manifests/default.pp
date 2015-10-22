@@ -1,8 +1,8 @@
-$appuser = "ubuntu"
-$appgroup = "ubuntu"
+$appuser = "refinery"
+$appgroup = "refinery"
 $virtualenv = "/home/${appuser}/.virtualenvs/refinery-platform"
-$requirements = "/vagrant/requirements.txt"
-$project_root = "/vagrant/refinery"
+$requirements = "/srv/refinery-platform/requirements.txt"
+$project_root = "/srv/refinery-platform/refinery"
 $django_settings_module = "config.settings.dev"
 $ui_app_root = "${project_root}/ui"
 
@@ -14,12 +14,16 @@ class { 'timezone':
 # for better performance
 sysctl { 'vm.swappiness': value => '10' }
 
-# to avoid empty ident name not allowed error when using git
-user { $appuser: comment => $appuser }
-
+file { "/home/${appuser}/.ssh":
+  ensure => directory,
+  owner => $appuser,
+  group => $appgroup,
+  mode => 0700,
+}
+->
 file { "/home/${appuser}/.ssh/config":
   ensure => file,
-  source => "/vagrant/deployment/ssh-config",
+  source => "/srv/refinery-platform/deployment/ssh-config",
   owner => $appuser,
   group => $appgroup,
 }
@@ -62,7 +66,7 @@ class venvdeps {
 include venvdeps
 
 file { "/home/${appuser}/.virtualenvs":
-  # workaround for parent directory /home/vagrant/.virtualenvs does not exist error
+  # workaround for parent directory ~${appuser}/.virtualenvs does not exist error
   ensure => directory,
   owner => $appuser,
   group => $appgroup,
@@ -98,7 +102,7 @@ file { "virtualenvwrapper_project":
   group => $appgroup,
 }
 
-file { ["/vagrant/isa-tab", "/vagrant/import", "/vagrant/static"]:
+file { ["/srv/refinery-platform/isa-tab", "/srv/refinery-platform/import", "/srv/refinery-platform/static"]:
   ensure => directory,
   owner => $appuser,
   group => $appgroup,
@@ -388,7 +392,7 @@ exec { 'apache2-wsgi':
 ->
 file { "/etc/apache2/sites-available/001-refinery.conf":
   ensure => file,
-  content => template("/vagrant/deployment/apache.conf"),
+  content => template("/srv/refinery-platform/deployment/apache.conf"),
 }
 ~>
 exec { 'refinery-apache2':
