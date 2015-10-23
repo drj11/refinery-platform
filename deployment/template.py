@@ -1,10 +1,12 @@
 cft = CloudFormationTemplate(description="A very small template.")
 
-user_data_script = open('bootstrap.sh').read() + '''
-/usr/bin/puppet apply --modulepath=/srv/refinery-platform/deployment/modules /srv/refinery-platform/deployment/manifests/default.pp
-'''
+user_data_script = open('bootstrap.sh').read() + (
+    "/usr/bin/puppet apply "
+    "--modulepath=/srv/refinery-platform/deployment/modules "
+    "/srv/refinery-platform/deployment/manifests/default.pp")
 
-cft.resources.ec2_instance = Resource('AnInstance', 'AWS::EC2::Instance',
+cft.resources.ec2_instance = Resource(
+    'AnInstance', 'AWS::EC2::Instance',
     Properties({
         'ImageId': 'ami-d05e75b8',
         'InstanceType': 'm3.medium',
