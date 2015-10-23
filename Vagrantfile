@@ -22,7 +22,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.forward_agent = true  # to enable cloning from Github over SSH
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder ".", "/srv/refinery-platform", create: true, owner: 1002, group: 1002
+  config.vm.synced_folder ".", "/srv/refinery-platform", create: true, owner: 1010, group: 1010
 
   # If you'd like to be able to copy data from an instance of Galaxy
   # that's installed on the host, set $GALAXY_DATABSE_DIR environment
