@@ -8,8 +8,8 @@ install:
 env:
   - DJANGO_SETTINGS_MODULE=config.settings.dev
 before_script:
-  - createuser --createdb --no-superuser --no-createrole vagrant
-  - createdb -O vagrant refinery
+  - createuser --createdb --no-superuser --no-createrole refinery
+  - createdb -O refinery refinery
   - cd refinery
   - cp config/config.json.sample config/config.json
   - python manage.py syncdb --migrate --noinput
