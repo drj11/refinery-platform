@@ -5,9 +5,7 @@ user_data_script = open('bootstrap.sh').read() + (
     "--modulepath=/srv/refinery-platform/deployment/modules "
     "/srv/refinery-platform/deployment/manifests/default.pp")
 
-# add to user_data_script
-# in production: git clone
-# in development: rsync
+# TODO: add git clone to user_data_script
 
 cft.resources.ec2_instance = Resource(
     'AnInstance', 'AWS::EC2::Instance',
