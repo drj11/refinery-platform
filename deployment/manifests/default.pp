@@ -1,7 +1,8 @@
-$app_user = "refinery"
-$app_group = "refinery"
-$virtualenv = "/home/${app_user}/.virtualenvs/refinery-platform"
-$project_root = "/srv/refinery-platform"
+$app_user = "vagrant"
+$app_group = $app_user
+$app_name = "refinery-platform"
+$virtualenv = "/home/${app_user}/.virtualenvs/${app_name}"
+$project_root = "/${app_user}"
 $django_root = "${project_root}/refinery"
 $requirements = "${project_root}/requirements.txt"
 $django_settings_module = "config.settings.dev"
@@ -24,7 +25,7 @@ file { "/home/${app_user}/.ssh":
 ->
 file { "/home/${app_user}/.ssh/config":
   ensure => file,
-  source => "/srv/refinery-platform/deployment/ssh-config",
+  source => "${project_root}/deployment/ssh-config",
   owner => $app_user,
   group => $app_group,
 }
@@ -90,7 +91,7 @@ package { 'virtualenvwrapper': }
 ->
 file_line { "virtualenvwrapper_config":
   path => "/home/${app_user}/.profile",
-  line => "source /etc/bash_completion.d/virtualenvwrapper",
+  line => "source /etc/bash_completion.d/virtualenvwrapper && workon ${app_name}",
   require => Python::Virtualenv[$virtualenv],
 }
 ->
@@ -103,7 +104,7 @@ file { "virtualenvwrapper_project":
   group => $app_group,
 }
 
-file { ["/srv/refinery-platform/isa-tab", "/srv/refinery-platform/import", "/srv/refinery-platform/static"]:
+file { ["${project_root}/isa-tab", "${project_root}/import", "${project_root}/static"]:
   ensure => directory,
   owner => $app_user,
   group => $app_group,
@@ -408,7 +409,7 @@ exec { 'apache2-wsgi':
 ->
 file { "/etc/apache2/sites-available/001-refinery.conf":
   ensure => file,
-  content => template("/srv/refinery-platform/deployment/apache.conf"),
+  content => template("${project_root}/deployment/apache.conf"),
 }
 ~>
 exec { 'refinery-apache2':
