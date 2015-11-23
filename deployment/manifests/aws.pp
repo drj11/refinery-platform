@@ -1,16 +1,16 @@
 $appuser = "ubuntu"
 $appgroup = "ubuntu"
 $virtualenv = "/home/${appuser}/.virtualenvs/refinery-platform"
-$requirements = "/vagrant/requirements.txt"
-$project_root = "/srv/refinery-platform/refinery"
 $source_root = "/srv/refinery-platform"
+$project_root = "${source_root}/refinery"
+$requirements = "${source_root}/requirements.txt"
 $django_settings_module = "config.settings.dev"
 $ui_app_root = "${project_root}/ui"
 
 # to make logs easier to read
-class { 'timezone':
-  timezone => 'America/New_York',
-}
+# class { 'timezone':
+#   timezone => 'America/New_York',
+# }
 
 # for better performance
 sysctl { 'vm.swappiness': value => '10' }
