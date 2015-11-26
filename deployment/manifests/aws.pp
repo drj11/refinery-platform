@@ -21,7 +21,7 @@ user { $appuser: comment => $appuser }
 # Not needed for AWS
 file { "/home/${appuser}/.ssh/config":
   ensure => file,
-  source => "/${source_root}/deployment/ssh-config",
+  source => "${source_root}/deployment/ssh-config",
   owner => $appuser,
   group => $appgroup,
 }
