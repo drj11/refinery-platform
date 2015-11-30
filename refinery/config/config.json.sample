@@ -22,7 +22,6 @@
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "HOST": "",
         "NAME": "refinery",
-        "USER": "vagrant",
         "PASSWORD": "",
         "PORT": "",
         "USER": "ubuntu"
