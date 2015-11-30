@@ -1,3 +1,9 @@
+# This is a cfn-pyplates template file
+# for generating
+# an AWS CloudFormation json file.
+# See AWS.md for notes on how to use this
+# to deply to Amazon AWS.
+
 cft = CloudFormationTemplate(description="Single instance template.")
 
 user_data_script = open('bootstrap.sh').read() + open('aws.sh').read()
