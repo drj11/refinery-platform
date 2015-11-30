@@ -15,5 +15,6 @@ cft.resources.ec2_instance = Resource(
         'InstanceType': 'm3.medium',
         'UserData': base64(user_data_script),
         'KeyName': 'id_rsa',
+        'Tags': [{'Key': 'refinery', 'Value': 'refinery'}],
     })
 )
