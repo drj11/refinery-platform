@@ -4,7 +4,7 @@
 # See AWS.md for notes on how to use this
 # to deply to Amazon AWS.
 
-cft = CloudFormationTemplate(description="Single instance template.")
+cft = CloudFormationTemplate(description="refinery monolithic template.")
 
 user_data_script = open('bootstrap.sh').read() + open('aws.sh').read()
 
