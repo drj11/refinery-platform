@@ -22,7 +22,7 @@ aws cloudformation create-stack --stack-name test-$(date +%Y%m%dT%H%M) --templat
 ```
 
 This creates a stack with a new name every time, you might
-prefer to re-user the stack name and delete it when you want to
+prefer to re-use the stack name and delete it when you want to
 create a new stack.
 
 
